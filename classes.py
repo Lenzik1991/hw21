@@ -1,26 +1,4 @@
-from abc import abstractmethod, ABC
-
-
-class Storage(ABC):
-    @abstractmethod
-    def add(self, name, count):
-        pass
-
-    @abstractmethod
-    def remove(self, name, count):
-        pass
-
-    @abstractmethod
-    def get_free_space(self):
-        pass
-
-    @abstractmethod
-    def get_items(self):
-        pass
-
-    @abstractmethod
-    def get_unique_items_count(self):
-        pass
+from classes_abstractmethod import Storage
 
 
 class Store(Storage):
@@ -103,14 +81,26 @@ class Request:
             self.__to = req_list[4]
             self.__from = None
 
-    def move(self):
-        if self.__to and self.__from:
-            if eval(self.__to).add(self.__item, self.__count):
-                eval(self.__from).remove(self.__item, self.__count)
-        elif self.__to:
-            eval(self.__to).add(self.__item, self.__count)
-        elif self.__from:
-            eval(self.__from).remove(self.__item, self.__count)
+
+#    def move(self):
+#        if self.__to and self.__from:
+#            if eval(self.__to).add(self.__item, self.__count):
+#                eval(self.__from).remove(self.__item, self.__count)
+#        elif self.__to:
+#            eval(self.__to).add(self.__item, self.__count)
+#        elif self.__from:
+#            eval(self.__from).remove(self.__item, self.__count)
+
+
+    def move(self, request_str):
+        list = request_str.split()
+        if list[self.__to] and list[self.__from]:
+            if list[self.__to].add(list[self.__item], list[self.__count]):
+                list[self.__from].remove(list[self.__item], list[self.__count])
+        elif list[self.__to]:
+            list[self.__to].add(list[self.__item], list[self.__count])
+        elif list[self.__from]:
+            list[self.__from].remove(list[self.__item], list[self.__count])
 
 
 storage_1 = Store(items={"Телефон": 10, "Компьютер": 10, "Телевизор": 20})
