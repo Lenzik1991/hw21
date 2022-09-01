@@ -34,7 +34,7 @@ class Store(Storage):
             print("Недостаточно товара на складе")
             return False
 
-    def _get_free_space(self):
+    def get_free_space(self):
         current_space = 0
         for value in self.__items.values():
             current_space += value
@@ -43,7 +43,7 @@ class Store(Storage):
     def get_items(self):
         return self.__items
 
-    def _get_unique_items_count(self):
+    def get_unique_items_count(self):
         return len(self.__items.keys())
 
     def __str__(self):
