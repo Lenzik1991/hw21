@@ -14,7 +14,10 @@ class Store(Storage):
                 self.__items[name] += count
                 return True
             else:
-                print("Недостаточно места на складе")
+                if isinstance(self, Shop):
+                    print("Недостаточно места в магазине")
+                else:
+                    print("Недостаточно места на складе")
                 return False
         else:
             if self.get_free_space() >= count:
@@ -81,26 +84,34 @@ class Request:
             self.__to = req_list[4]
             self.__from = None
 
+    def move(self):
+        if self.__to and self.__from:
+            if eval(self.__to).add(self.__items, self.__count):
+                eval(self.__from).remove(self.__items, self.__count)
+        elif self.__to:
+            eval(self.__to).add(self.__items, self.__count)
+        elif self.__from:
+            eval(self.__from).remove(self.__items, self.__count)
 
-#    def move(self):
-#        if self.__to and self.__from:
-#            if eval(self.__to).add(self.__item, self.__count):
-#                eval(self.__from).remove(self.__item, self.__count)
-#        elif self.__to:
-#            eval(self.__to).add(self.__item, self.__count)
-#        elif self.__from:
-#            eval(self.__from).remove(self.__item, self.__count)
+    # def move(self, request_str):
+    #    list = request_str.split()
+    #    if list[self.__to] and list[self.__from]:
+    #        if list[self.__to].add(list[self.__items], list[self.__count]):
+    #            list[self.__from].remove(list[self.__items], list[self.__count])
+    #    elif list[self.__to]:
+    #        list[self.__to].add(list[self.__items], list[self.__count])
+    #    elif list[self.__from]:
+    #        list[self.__from].remove(list[self.__items], list[self.__count])
 
-
-    def move(self, request_str):
-        list = request_str.split()
-        if list[self.__to] and list[self.__from]:
-            if list[self.__to].add(list[self.__item], list[self.__count]):
-                list[self.__from].remove(list[self.__item], list[self.__count])
-        elif list[self.__to]:
-            list[self.__to].add(list[self.__item], list[self.__count])
-        elif list[self.__from]:
-            list[self.__from].remove(list[self.__item], list[self.__count])
+    # def move(self):
+    #     dict = {"Склад_1": storage_1, "Склад_2": storage_2, "Магазин": shop_1}
+    #     if self.__to and self.__from:
+    #        if self.__to.add(self.__items, self.__count):
+    #            self.__from.remove(self.__items, self.__count)
+    #     elif self.__to:
+    #        self.__to.add(self.__items, self.__count)
+    #     elif self.__from:
+    #        self.__from.remove(self.__items, self.__count)
 
 
 storage_1 = Store(items={"Телефон": 10, "Компьютер": 10, "Телевизор": 20})
