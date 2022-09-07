@@ -29,8 +29,12 @@ class Store(Storage):
                 return False
 
     def remove(self, name, count):
+        # self.__items[name] -= count
+        # if self.__items[name] == 0:
+        #     self.__items.pop(name)
+
         if self.__items[name] > count:
-            print("Нужное кол-во есть на складе")
+            print("Нужное количество есть на складе")
             self.__items[name] -= count
             return True
         else:
@@ -69,11 +73,15 @@ class Shop(Store):
 
 
 class Request:
-    def __init__(self, request_str):
-        req_list = request_str.split()
+    def __init__(self, request):
+        req_list = request.split()
         action = req_list[0]
-        self.__count = int(req_list[1])
-        self.__items = req_list[2]
+
+        # self.count = int(req_list[1])
+        # self.name = req_list[2]
+        # self.departure = req_list[4]
+        # self.destination = req_list[6]
+
         if action == "Доставить":
             self.__from = req_list[4]
             self.__to = req_list[6]
@@ -84,14 +92,26 @@ class Request:
             self.__to = req_list[4]
             self.__from = None
 
+
+        # if self.__request.departure in storages:
+        #     self.__from = storages[self.__request.departure]
+        #
+        # if self.__request.destination in storages:
+        #     self.__from = storages[self.__request.destination]
+        self.__request = request
+
     def move(self):
-        if self.__to and self.__from:
-            if eval(self.__to).add(self.__items, self.__count):
-                eval(self.__from).remove(self.__items, self.__count)
-        elif self.__to:
-            eval(self.__to).add(self.__items, self.__count)
-        elif self.__from:
-            eval(self.__from).remove(self.__items, self.__count)
+        self.__from.remove(name=self.__request.name, count=self.__request.count)
+        self.__to.add(name=self.__request.name, count=self.__request.count)
+
+    # def move(self):
+    #     if self.__to and self.__from:
+    #         if eval(self.__to).add(self.__items, self.__count):
+    #             eval(self.__from).remove(self.__items, self.__count)
+    #     elif self.__to:
+    #         eval(self.__to).add(self.__items, self.__count)
+    #     elif self.__from:
+    #         eval(self.__from).remove(self.__items, self.__count)
 
     # def move(self, request_str):
     #    list = request_str.split()
@@ -105,15 +125,3 @@ class Request:
 
     # def move(self):
     #     dict = {"Склад_1": storage_1, "Склад_2": storage_2, "Магазин": shop_1}
-    #     if self.__to and self.__from:
-    #        if self.__to.add(self.__items, self.__count):
-    #            self.__from.remove(self.__items, self.__count)
-    #     elif self.__to:
-    #        self.__to.add(self.__items, self.__count)
-    #     elif self.__from:
-    #        self.__from.remove(self.__items, self.__count)
-
-
-storage_1 = Store(items={"Телефон": 10, "Компьютер": 10, "Телевизор": 20})
-storage_2 = Store(items={"Телефон": 10, "Компьютер": 10, "Приставка": 10})
-shop_1 = Shop(items={"Телефон": 3, "Компьютер": 3, "Телевизор": 3})
