@@ -1,3 +1,5 @@
+from typing import Dict
+
 from classes_abstractmethod import Storage
 
 
@@ -7,7 +9,7 @@ class Store(Storage):
         self.__items = items
         self.__capacity = capacity
 
-    def add(self, name, count):
+    def add(self, name: str, count: int):
         if name in self.__items.keys():
             if self.get_free_space() >= count:
                 print("Товар добавлен")
@@ -74,23 +76,23 @@ class Shop(Store):
 
 class Request:
     def __init__(self, request):
-        req_list = request.split()
+        req_list = request.lower().split(' ')
         action = req_list[0]
 
-        # self.count = int(req_list[1])
-        # self.name = req_list[2]
-        # self.departure = req_list[4]
-        # self.destination = req_list[6]
+        self.count = int(req_list[1])
+        self.name = req_list[2]
+        self.departure = req_list[4]
+        self.destination = req_list[6]
 
-        if action == "Доставить":
-            self.__from = req_list[4]
-            self.__to = req_list[6]
-        elif action == "Забрать":
-            self.__from = req_list[4]
-            self.__to = None
-        elif action == "Привезти":
-            self.__to = req_list[4]
-            self.__from = None
+        # if action == "Доставить":
+        #     self.__from = req_list[4]
+        #     self.__to = req_list[6]
+        # elif action == "Забрать":
+        #     self.__from = req_list[4]
+        #     self.__to = None
+        # elif action == "Привезти":
+        #     self.__to = req_list[4]
+        #     self.__from = None
 
 
         # if self.__request.departure in storages:
@@ -98,11 +100,25 @@ class Request:
         #
         # if self.__request.destination in storages:
         #     self.__from = storages[self.__request.destination]
+
+
+class Courier:
+    def __init__(self, request: Request, storages: Dict[str, Storage]):
         self.__request = request
+
+        if self.__request.departure in storages:
+            self.__from = storages[self.__request.departure]
+
+        if self.__request.destination in storages:
+            self.__to = storages[self.__request.destination]
 
     def move(self):
         self.__from.remove(name=self.__request.name, count=self.__request.count)
+        print(f'Курьер забрал {self.__request.count} {self.__request.name} из {self.__request.departure}')
+
         self.__to.add(name=self.__request.name, count=self.__request.count)
+        print(f'Курьер доставил {self.__request.count} {self.__request.name} в {self.__request.destination}')
+
 
     # def move(self):
     #     if self.__to and self.__from:
